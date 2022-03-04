@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: PildoraBravent2022
+      PGDATA: /data/postgres
+    volumes:
+      - ../data/postgres:/data/postgres
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    networks:
+      - cqrs-es-pildora
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin-ui
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@domain.local
+      PGADMIN_DEFAULT_PASSWORD: 1234
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - ../data/pgadmin:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-8083}:80"
+    networks:
+      - cqrs-es-pildora
+    restart: unless-stopped
+
+networks:
+  cqrs-es-pildora:
+    driver: bridge
