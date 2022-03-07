@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{472F745C-D41B-4132-BE75-235B436ABCCE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrailRunning.Races.Management.DomainTests", "src\DomainTests\TrailRunning.Races.Management.DomainTests.csproj", "{EFF38F7B-C033-4DDB-9704-0D12A5453155}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrailRunning.Races.Management.Domain", "src\Domain\TrailRunning.Races.Management.Domain.csproj", "{23629038-5C5B-479C-AE28-9F9DD5FAD82C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution items", "_solution items", "{1197EF76-3E62-4088-9CE0-FB74917F31B8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		build\dependencies.props = build\dependencies.props
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{2209587D-3A82-489F-863A-0F3BB15CBC7A}"
+	ProjectSection(SolutionItems) = preProject
+		build\docker-compose.yml = build\docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrailRunning.Races.Core", "src\Core\TrailRunning.Races.Core.csproj", "{8F8AA9A6-24C7-4789-9D2A-29A4044F5445}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFF38F7B-C033-4DDB-9704-0D12A5453155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFF38F7B-C033-4DDB-9704-0D12A5453155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFF38F7B-C033-4DDB-9704-0D12A5453155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF38F7B-C033-4DDB-9704-0D12A5453155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23629038-5C5B-479C-AE28-9F9DD5FAD82C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23629038-5C5B-479C-AE28-9F9DD5FAD82C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23629038-5C5B-479C-AE28-9F9DD5FAD82C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23629038-5C5B-479C-AE28-9F9DD5FAD82C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F8AA9A6-24C7-4789-9D2A-29A4044F5445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F8AA9A6-24C7-4789-9D2A-29A4044F5445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F8AA9A6-24C7-4789-9D2A-29A4044F5445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F8AA9A6-24C7-4789-9D2A-29A4044F5445}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EFF38F7B-C033-4DDB-9704-0D12A5453155} = {472F745C-D41B-4132-BE75-235B436ABCCE}
+		{2209587D-3A82-489F-863A-0F3BB15CBC7A} = {1197EF76-3E62-4088-9CE0-FB74917F31B8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F942BFC0-BFAA-49C6-A211-AFBFE874C979}
+	EndGlobalSection
+EndGlobal
