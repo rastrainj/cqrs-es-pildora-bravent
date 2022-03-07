@@ -1,6 +1,7 @@
 using Hellang.Middleware.ProblemDetails;
 using Marten;
 using Marten.Services;
+using System.Text.Json.Serialization;
 using TrailRunning.Races.Core.Serialization;
 using TrailRunning.Races.Core.Threading;
 using TrailRunning.Races.Management.Host.Configuration;
@@ -73,6 +74,7 @@ public static class ServiceCollectionExtensions
         {
             jsonSerializerOptions.Converters.Add(new DateOnlyConverter());
             jsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
+            jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
         options.Serializer(serializer);
 

@@ -8,7 +8,7 @@ public static class PlanRace
 {
     [ApiExplorerSettings(GroupName = "Races")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public static async Task<IResult> Handle(PlanRaceRequest request, IMediator mediator)
     {
         var raceId = Guid.NewGuid();

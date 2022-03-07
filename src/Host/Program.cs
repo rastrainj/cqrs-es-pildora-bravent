@@ -1,7 +1,7 @@
 using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Text.Json.Serialization;
 using TrailRunning.Races.Core.Repository;
 using TrailRunning.Races.Core.Serialization;
 using TrailRunning.Races.Management.Host.Configuration;
@@ -20,10 +20,11 @@ builder.Services
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddCustomProblemDetails();
 
-builder.Services.Configure<JsonOptions>(options =>
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new DateOnlyConverter());
     options.SerializerOptions.Converters.Add(new TimeOnlyConverter());
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
 builder.Services.AddScoped(typeof(IMartenRepository<>), typeof(MartenRepository<>));
