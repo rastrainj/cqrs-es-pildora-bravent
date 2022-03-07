@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Core\TrailRunning.Races.Core.csproj" />
+  </ItemGroup>
+
 </Project>

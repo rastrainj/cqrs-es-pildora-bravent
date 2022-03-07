@@ -1,4 +1,5 @@
 using TrailRunning.Races.Management.Domain.Races;
+using TrailRunning.Races.Management.Domain.Races.Events;
 using TrailRunning.Races.Management.Domain.Races.Exceptions;
 
 namespace TrailRunning.Races.Management.DomainTests.Races;
@@ -42,5 +43,29 @@ public class races_should
         var act = () => RaceTechnicalData.Create(100, -0.1);
 
         act.Should().Throw<RaceTechnicalDataException>();
+    }
+
+    [Fact]
+    public void allow_plan_and_status_planned()
+    {
+        var raceId = Guid.NewGuid();
+        var date = RaceDate.Create(DateOnly.FromDateTime(DateTime.Now.AddDays(10)), new(9, 0));
+        var location = RaceLocation.Create("Pamplona");
+        var technicalData = RaceTechnicalData.Create(100, 6_000);
+
+        var race = Race.Plan(raceId, date, location, technicalData);
+
+        race.Should().NotBeNull();
+        race.Version.Should().Be(1);
+        race.Status.Should().Be(RaceStatus.Planned);
+        race.Id.Should().Be(raceId);
+        race.Date.Should().BeEquivalentTo(date);
+        race.Location.Should().BeEquivalentTo(location);
+        race.TechnicalData.Should().BeEquivalentTo(technicalData);
+
+        var @event = race.PublishedEvent<RacePlannedEvent>();
+        @event.Should().NotBeNull();
+        @event.Should().BeOfType<RacePlannedEvent>();
+        @event!.RaceId.Should().Be(race.Id);
     }
 }
