@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrailRunning.Races.Core.Repository;
 using TrailRunning.Races.Management.Domain.Races;
 
 namespace TrailRunning.Races.Management.Host.Features.Races.PlanRace;
@@ -33,9 +34,16 @@ public record PlanRaceCommand(Guid RaceId, RaceDate Date, RaceLocation Location,
 
 public class PlanRaceCommandHandler : IRequestHandler<PlanRaceCommand>
 {
+    private readonly IMartenRepository<Race> _martenRepository;
+
+    public PlanRaceCommandHandler(IMartenRepository<Race> martenRepository)
+        => _martenRepository = martenRepository ?? throw new ArgumentNullException(nameof(martenRepository));
+
     public async Task<Unit> Handle(PlanRaceCommand request, CancellationToken cancellationToken)
     {
         var race = Race.Plan(request.RaceId, request.Date, request.Location, request.TechnicalData);
+
+        await _martenRepository.AddAsync(race, cancellationToken);
 
         return Unit.Value;
     }

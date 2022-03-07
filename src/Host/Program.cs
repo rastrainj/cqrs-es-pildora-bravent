@@ -1,5 +1,6 @@
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Http.Json;
+using TrailRunning.Races.Core.Repository;
 using TrailRunning.Races.Core.Serialization;
 using TrailRunning.Races.Management.Host.Features.Races;
 
@@ -7,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,6 +20,9 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.Converters.Add(new DateOnlyConverter());
     options.SerializerOptions.Converters.Add(new TimeOnlyConverter());
 });
+
+builder.Services.AddScoped(typeof(IMartenRepository<>), typeof(MartenRepository<>));
+builder.Services.AddCustomMarten(options => options.ConfigureRaces());
 
 var app = builder.Build();
 

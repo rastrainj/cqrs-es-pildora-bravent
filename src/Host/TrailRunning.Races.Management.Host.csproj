@@ -17,4 +17,10 @@
     <ProjectReference Include="..\Domain\TrailRunning.Races.Management.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.tests.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

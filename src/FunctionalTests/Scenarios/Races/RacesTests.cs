@@ -1,3 +1,4 @@
+using TrailRunning.Races.Management.Domain.Races;
 using TrailRunning.Races.Management.Host.Features.Races.PlanRace;
 
 namespace TrailRunning.Races.Management.FunctionalTests.Scenarios.Races;
@@ -51,5 +52,17 @@ public class races_controller_should
         var id = await response.Content.ReadAsAsync<Guid>();
 
         id.Should().NotBeEmpty();
+
+        var raceAggregate = await _testingWebAppFactory.Given
+            .GetAsync<Race>(id);
+
+        raceAggregate.Should().NotBeNull();
+        raceAggregate!.Version.Should().Be(1);
+        raceAggregate!.Status.Should().Be(RaceStatus.Planned);
+        raceAggregate!.Date.Date.Should().BeEquivalentTo(date);
+        raceAggregate!.Date.Hour.Should().BeEquivalentTo(hour);
+        raceAggregate!.Location.Town.Should().Be(town);
+        raceAggregate!.TechnicalData!.Distance.Should().Be(distance);
+        raceAggregate!.TechnicalData!.ElevationGain.Should().Be(elevationGain);
     }
 }

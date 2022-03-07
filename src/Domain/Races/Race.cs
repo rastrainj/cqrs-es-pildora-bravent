@@ -13,6 +13,8 @@ public class Race : Aggregate
     public static Race Plan(Guid raceId, RaceDate date, RaceLocation location, RaceTechnicalData? technicalData)
         => new(raceId, date, location, technicalData);
 
+    private Race() { }
+
     private Race(Guid raceId, RaceDate date, RaceLocation location, RaceTechnicalData? technicalData)
     {
         var @event = new RacePlannedEvent(raceId, date.Date, date.Hour, location.Town, technicalData?.Distance, technicalData?.ElevationGain);
