@@ -1,7 +1,10 @@
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using TrailRunning.Races.Core.Repository;
 using TrailRunning.Races.Core.Serialization;
+using TrailRunning.Races.Management.Host.Configuration;
 using TrailRunning.Races.Management.Host.Features.Races;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services
+    .AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
+    .AddSwaggerGen();
 
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddCustomProblemDetails();
