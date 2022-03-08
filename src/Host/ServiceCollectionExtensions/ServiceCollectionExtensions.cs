@@ -43,6 +43,7 @@ public static class ServiceCollectionExtensions
 
         var documentStore = services
             .AddMarten(options => SetStoreOptions(options, martenConfig, configureOptions))
+            .AddAsyncDaemon(Marten.Events.Daemon.Resiliency.DaemonMode.Solo)
             .InitializeStore();
 
         SetupSchema(documentStore, martenConfig, 1);
@@ -58,12 +59,6 @@ public static class ServiceCollectionExtensions
         var schemaName = Environment.GetEnvironmentVariable("SchemaName");
         options.Events.DatabaseSchemaName = schemaName ?? config.WriteModelSchema;
         options.DatabaseSchemaName = schemaName ?? config.ReadModelSchema;
-
-        options.UseDefaultSerialization(
-            EnumStorage.AsString,
-            nonPublicMembersStorage: NonPublicMembersStorage.All,
-            serializerType: Marten.Services.Json.SerializerType.SystemTextJson
-        );
 
         var serializer = new SystemTextJsonSerializer
         {

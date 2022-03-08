@@ -31,13 +31,15 @@ public class TestingWebAppFactory : WebApplicationFactory<Program>
 
     internal static void ResetDatabase()
     {
-        var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
+        using var scope = _serviceProvider.CreateScope();
+
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
         var martenConfig = configuration.GetSection("EventStore").Get<MartenConfig>();
-        var options = _serviceProvider.GetService<StoreOptions>();
+        var options = scope.ServiceProvider.GetService<StoreOptions>();
 
         _checkpoint.WithReseed = false;
-        _checkpoint.SchemasToInclude = new string[] { options!.Events.DatabaseSchemaName, options.DatabaseSchemaName };
+        _checkpoint.SchemasToInclude = new string[] { options!.Events.DatabaseSchemaName, options.DatabaseSchemaName, "public" };
 
         using var connection = new NpgsqlConnection(martenConfig.ConnectionString);
         connection.Open();
@@ -45,12 +47,21 @@ public class TestingWebAppFactory : WebApplicationFactory<Program>
         _checkpoint.Reset(connection).Wait();
     }
 
-    public Task<T?> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T?>> func) where T : class => func(_serviceProvider);
-    public Task ExecuteScopeAsync(Func<IServiceProvider, Task> func) => func(_serviceProvider);
+    public async Task<T?> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T?>> func) where T : class
+    {
+        using var scope = _serviceProvider.CreateScope();
+        return await func(scope.ServiceProvider);
+    }
+
+    public async Task ExecuteScopeAsync(Func<IServiceProvider, Task> func)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        await func(scope.ServiceProvider);
+    }
 
     public Task<T?> ExecuteAsync<T>(Func<IMartenRepository<T>, Task<T?>> func) where T : class, IAggregate
-        => ExecuteScopeAsync(sp => func(_serviceProvider.GetService<IMartenRepository<T>>()!));
+        => ExecuteScopeAsync(sp => func(sp.GetService<IMartenRepository<T>>()!));
 
     public async Task ExecuteAsync<T>(Func<IMartenRepository<T>, Task> func) where T : class, IAggregate
-        => await ExecuteScopeAsync(sp => func(_serviceProvider.GetService<IMartenRepository<T>>()!));
+        => await ExecuteScopeAsync(sp => func(sp.GetService<IMartenRepository<T>>()!));
 }

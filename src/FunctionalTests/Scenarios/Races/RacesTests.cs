@@ -56,17 +56,17 @@ public class races_controller_should
 
         id.Should().NotBeEmpty();
 
-        //var raceAggregate = await _testingWebAppFactory.Given
-        //    .GetAsync<Race>(id);
+        var raceAggregate = await _testingWebAppFactory.Given
+            .GetAsync<Race>(id);
 
-        //raceAggregate.Should().NotBeNull();
-        //raceAggregate!.Version.Should().Be(1);
-        //raceAggregate!.Status.Should().Be(RaceStatus.Planned);
-        //raceAggregate!.Date.Date.Should().BeEquivalentTo(date);
-        //raceAggregate!.Date.Hour.Should().BeEquivalentTo(hour);
-        //raceAggregate!.Location.Town.Should().Be(town);
-        //raceAggregate!.TechnicalData!.Distance.Should().Be(distance);
-        //raceAggregate!.TechnicalData!.ElevationGain.Should().Be(elevationGain);
+        raceAggregate.Should().NotBeNull();
+        raceAggregate!.Version.Should().Be(1);
+        raceAggregate!.Status.Should().Be(RaceStatus.Planned);
+        raceAggregate!.Date.Date.Should().BeEquivalentTo(date);
+        raceAggregate!.Date.Hour.Should().BeEquivalentTo(hour);
+        raceAggregate!.Location.Town.Should().Be(town);
+        raceAggregate!.TechnicalData!.Distance.Should().Be(distance);
+        raceAggregate!.TechnicalData!.ElevationGain.Should().Be(elevationGain);
     }
 
     [Fact]
