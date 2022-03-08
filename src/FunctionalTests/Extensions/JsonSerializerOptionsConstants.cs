@@ -1,4 +1,6 @@
-using System.Text.Json;
+using System.Dynamic;
+using System.Text.Json.Serialization;
+using TrailRunning.Races.Core.Response;
 using TrailRunning.Races.Core.Serialization;
 
 namespace TrailRunning.Races.Management.FunctionalTests.Extensions;
@@ -9,10 +11,12 @@ internal static class JsonSerializerOptionsConstants
     {
         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = false,
+        IncludeFields = true,
         Converters =
         {
             new DateOnlyConverter(),
-            new TimeOnlyConverter()
+            new TimeOnlyConverter(),
+            new JsonStringEnumConverter()
         }
     };
 }

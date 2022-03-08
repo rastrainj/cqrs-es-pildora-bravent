@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.4.0" />
+    <PackageReference Include="Hellang.Middleware.ProblemDetails" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>

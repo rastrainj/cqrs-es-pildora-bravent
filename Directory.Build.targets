@@ -23,5 +23,7 @@
   <ItemGroup>
     <PackageReference Update="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Update="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Update="Marten" Version="5.0.0-alpha.6" />
+    <PackageReference Update="Hellang.Middleware.ProblemDetails" Version="6.4.0" />
   </ItemGroup>
 </Project>

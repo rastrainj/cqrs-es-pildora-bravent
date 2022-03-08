@@ -5,5 +5,6 @@ public static class RacesEndpoints
     public static void MapRaces(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("/api/races", PlanRace.PlanRace.Handle);
+        endpoints.MapGet("/api/races", GetAllRaces.GetAllRaces.Handle);
     }
 }

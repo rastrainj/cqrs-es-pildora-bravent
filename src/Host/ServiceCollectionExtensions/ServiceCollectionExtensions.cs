@@ -1,6 +1,7 @@
 using Hellang.Middleware.ProblemDetails;
 using Marten;
 using Marten.Services;
+using System.Text.Json.Serialization;
 using TrailRunning.Races.Core.Serialization;
 using TrailRunning.Races.Core.Threading;
 using TrailRunning.Races.Management.Host.Configuration;
@@ -42,6 +43,7 @@ public static class ServiceCollectionExtensions
 
         var documentStore = services
             .AddMarten(options => SetStoreOptions(options, martenConfig, configureOptions))
+            .AddAsyncDaemon(Marten.Events.Daemon.Resiliency.DaemonMode.Solo)
             .InitializeStore();
 
         SetupSchema(documentStore, martenConfig, 1);
@@ -58,12 +60,6 @@ public static class ServiceCollectionExtensions
         options.Events.DatabaseSchemaName = schemaName ?? config.WriteModelSchema;
         options.DatabaseSchemaName = schemaName ?? config.ReadModelSchema;
 
-        options.UseDefaultSerialization(
-            EnumStorage.AsString,
-            nonPublicMembersStorage: NonPublicMembersStorage.All,
-            serializerType: Marten.Services.Json.SerializerType.SystemTextJson
-        );
-
         var serializer = new SystemTextJsonSerializer
         {
             EnumStorage = EnumStorage.AsString,
@@ -73,6 +69,7 @@ public static class ServiceCollectionExtensions
         {
             jsonSerializerOptions.Converters.Add(new DateOnlyConverter());
             jsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
+            jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
         options.Serializer(serializer);
 
