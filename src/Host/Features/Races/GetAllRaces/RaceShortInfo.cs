@@ -8,11 +8,13 @@ public class RaceShortInfo
 {
     public Guid Id { get; set; }
     public RaceStatus Status { get; set; }
+    public string Name { get; set; } = default!;
 
     public void Apply(RacePlannedEvent @event)
     {
         Id = @event.RaceId;
         Status = RaceStatus.Planned;
+        Name = @event.Name;
     }
 }
 

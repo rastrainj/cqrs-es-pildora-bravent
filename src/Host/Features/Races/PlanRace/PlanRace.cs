@@ -18,17 +18,18 @@ public static class PlanRace
     }
 }
 
-public record PlanRaceRequest(DateOnly Date, TimeOnly? Hour, string Town, double? Distance, double? ElevationGain);
+public record PlanRaceRequest(string Name, DateOnly Date, TimeOnly? Hour, string Town, double? Distance, double? ElevationGain);
 
-public record PlanRaceCommand(Guid RaceId, RaceDate Date, RaceLocation Location, RaceTechnicalData? TechnicalData) : IRequest
+public record PlanRaceCommand(Guid RaceId, RaceName Name, RaceDate Date, RaceLocation Location, RaceTechnicalData? TechnicalData) : IRequest
 {
     internal static PlanRaceCommand FromRequest(Guid RaceId, PlanRaceRequest request)
     {
+        var name = RaceName.Create(request.Name);
         var date = RaceDate.Create(request.Date, request.Hour);
         var location = RaceLocation.Create(request.Town);
         var technicalData = request.Distance is not null ? RaceTechnicalData.Create(request.Distance.Value, request.ElevationGain ?? 0) : null;
 
-        return new(RaceId, date, location, technicalData);
+        return new(RaceId, name, date, location, technicalData);
     }
 }
 
@@ -41,7 +42,7 @@ public class PlanRaceCommandHandler : IRequestHandler<PlanRaceCommand>
 
     public async Task<Unit> Handle(PlanRaceCommand request, CancellationToken cancellationToken)
     {
-        var race = Race.Plan(request.RaceId, request.Date, request.Location, request.TechnicalData);
+        var race = Race.Plan(request.RaceId, request.Name, request.Date, request.Location, request.TechnicalData);
 
         await _martenRepository.AddAsync(race, cancellationToken);
 

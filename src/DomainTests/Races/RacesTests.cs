@@ -18,9 +18,10 @@ public class races_should
     }
 
     [Theory]
+    [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void not_allow_create_location_if_empty(string location)
+    public void not_allow_create_location_if_null_or_empty(string location)
     {
         var act = () => RaceLocation.Create(location);
 
@@ -45,20 +46,33 @@ public class races_should
         act.Should().Throw<RaceTechnicalDataException>();
     }
 
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void not_allow_create_name_if_null_or_empty(string name)
+    {
+        var act = () => RaceName.Create(name);
+
+        act.Should().Throw<RaceNameException>();
+    }
+
     [Fact]
     public void allow_plan_and_status_planned()
     {
         var raceId = Guid.NewGuid();
+        var name = RaceName.Create("UTMB");
         var date = RaceDate.Create(DateOnly.FromDateTime(DateTime.Now.AddDays(10)), new(9, 0));
         var location = RaceLocation.Create("Pamplona");
         var technicalData = RaceTechnicalData.Create(100, 6_000);
 
-        var race = Race.Plan(raceId, date, location, technicalData);
+        var race = Race.Plan(raceId, name, date, location, technicalData);
 
         race.Should().NotBeNull();
         race.Version.Should().Be(1);
         race.Status.Should().Be(RaceStatus.Planned);
         race.Id.Should().Be(raceId);
+        race.Name.Should().BeEquivalentTo(name);
         race.Date.Should().BeEquivalentTo(date);
         race.Location.Should().BeEquivalentTo(location);
         race.TechnicalData.Should().BeEquivalentTo(technicalData);
