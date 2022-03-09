@@ -31,7 +31,7 @@ public class Race : Aggregate
         Id = @event.RaceId;
         Name = RaceName.Create(@event.Name);
         Date = RaceDate.Create(@event.Date, @event.Hour);
-        Location = RaceLocation.Create(@event.Location);
+        Location = RaceLocation.Create(@event.Town);
         TechnicalData = @event.Distance is not null ? RaceTechnicalData.Create(@event.Distance.Value, @event.ElevationGain!.Value) : null;
 
         Status = RaceStatus.Planned;

@@ -1,6 +1,7 @@
 using Marten;
 using TrailRunning.Races.Management.Domain.Races;
 using TrailRunning.Races.Management.Host.Features.Races.GetAllRaces;
+using TrailRunning.Races.Management.Host.Features.Races.GetRaceById;
 
 namespace TrailRunning.Races.Management.Host.Features.Races;
 
@@ -13,5 +14,6 @@ public static class RacesProjections
 
         // Projections
         options.Projections.Add<RaceShortInfoProjection>();
+        options.Projections.Add<RaceDetailsProjection>();
     }
 }
