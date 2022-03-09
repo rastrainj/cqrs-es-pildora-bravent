@@ -21,10 +21,11 @@ public class races_controller_should
     [Fact]
     public async Task plan_race_conflict_if_date_is_past()
     {
+        var name = "UTMB";
         var date = DateOnly.FromDateTime(DateTime.Now.AddDays(-1));
         var location = "Pamplona";
 
-        var request = new PlanRaceRequest(date, null, location, null, null);
+        var request = new PlanRaceRequest(name, date, null, location, null, null);
 
         var response = await _client
             .PostAsJsonAsync("api/races", request);
@@ -37,13 +38,14 @@ public class races_controller_should
     [Fact]
     public async Task plan_race_ok()
     {
+        var name = "UTMB";
         var date = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
         var hour = new TimeOnly(9, 0);
         var town = "Pamplona";
         var distance = 100;
         var elevationGain = 6_000;
 
-        var request = new PlanRaceRequest(date, hour, town, distance, elevationGain);
+        var request = new PlanRaceRequest(name, date, hour, town, distance, elevationGain);
 
         var response = await _client
             .PostAsJsonAsync("api/races", request);
@@ -62,6 +64,7 @@ public class races_controller_should
         raceAggregate.Should().NotBeNull();
         raceAggregate!.Version.Should().Be(1);
         raceAggregate!.Status.Should().Be(RaceStatus.Planned);
+        raceAggregate!.Name.Name.Should().BeEquivalentTo(name);
         raceAggregate!.Date.Date.Should().BeEquivalentTo(date);
         raceAggregate!.Date.Hour.Should().BeEquivalentTo(hour);
         raceAggregate!.Location.Town.Should().Be(town);
@@ -90,13 +93,14 @@ public class races_controller_should
     [ResetDatabase]
     public async Task get_all_ok()
     {
+        var name = "UTMB";
         var date = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
         var hour = new TimeOnly(9, 0);
         var town = "Pamplona";
         var distance = 100;
         var elevationGain = 6_000;
 
-        var race = Race.Plan(Guid.NewGuid(), RaceDate.Create(date, hour), RaceLocation.Create(town), RaceTechnicalData.Create(distance, elevationGain));
+        var race = Race.Plan(Guid.NewGuid(), RaceName.Create(name), RaceDate.Create(date, hour), RaceLocation.Create(town), RaceTechnicalData.Create(distance, elevationGain));
         await _testingWebAppFactory.Given.AddAsync(race);
 
         var response = await _client.GetAsync("api/races");
@@ -114,5 +118,6 @@ public class races_controller_should
         var raceInfo = content.Items.First();
         raceInfo.Id.Should().Be(race.Id);
         raceInfo.Status.Should().Be(RaceStatus.Planned);
+        raceInfo.Name.Should().Be(name);
     }
 }
