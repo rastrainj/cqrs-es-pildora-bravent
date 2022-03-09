@@ -2,6 +2,7 @@ using TrailRunning.Races.Core.Response;
 using TrailRunning.Races.Management.Domain.Races;
 using TrailRunning.Races.Management.FunctionalTests.Extensions;
 using TrailRunning.Races.Management.Host.Features.Races.GetAllRaces;
+using TrailRunning.Races.Management.Host.Features.Races.GetRaceById;
 using TrailRunning.Races.Management.Host.Features.Races.PlanRace;
 
 namespace TrailRunning.Races.Management.FunctionalTests.Scenarios.Races;
@@ -119,5 +120,47 @@ public class races_controller_should
         raceInfo.Id.Should().Be(race.Id);
         raceInfo.Status.Should().Be(RaceStatus.Planned);
         raceInfo.Name.Should().Be(name);
+    }
+
+    [Fact]
+    public async Task get_byid_notfound_if_not_exists()
+    {
+        var response = await _client.GetAsync($"api/races/{Guid.NewGuid()}");
+
+        response.StatusCode
+            .Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task get_byid_ok()
+    {
+        var name = "UTMB";
+        var date = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+        var hour = new TimeOnly(9, 0);
+        var town = "Pamplona";
+        var distance = 100;
+        var elevationGain = 6_000;
+
+        var race = Race.Plan(Guid.NewGuid(), RaceName.Create(name), RaceDate.Create(date, hour), RaceLocation.Create(town), RaceTechnicalData.Create(distance, elevationGain));
+        await _testingWebAppFactory.Given.AddAsync(race);
+
+        var response = await _client.GetAsync($"api/races/{race.Id}");
+
+        response.StatusCode
+            .Should().Be(HttpStatusCode.OK);
+
+        var content = await response.Content
+            .ReadAsAsync<RaceDetails>();
+
+        content.Should().NotBeNull();
+
+        content!.Id.Should().Be(race.Id);
+        content.Status.Should().Be(race.Status);
+        content.Name.Should().Be(name);
+        content.Date.Should().Be(date);
+        content.Hour.Should().Be(hour);
+        content.Town.Should().Be(town);
+        content.Distance.Should().Be(distance);
+        content.ElevationGain.Should().Be(elevationGain);
     }
 }

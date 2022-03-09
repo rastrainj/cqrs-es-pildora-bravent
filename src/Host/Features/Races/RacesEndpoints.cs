@@ -6,5 +6,6 @@ public static class RacesEndpoints
     {
         endpoints.MapPost("/api/races", PlanRace.PlanRace.Handle);
         endpoints.MapGet("/api/races", GetAllRaces.GetAllRaces.Handle);
+        endpoints.MapGet("/api/races/{raceId}", GetRaceById.GetRaceById.Handle);
     }
 }
